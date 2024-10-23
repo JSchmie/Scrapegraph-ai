@@ -119,14 +119,25 @@ class ChromiumLoader(BaseLoader):
                     browser = await p.chromium.launch(
                         headless=self.headless, proxy=self.proxy, **self.browser_config
                     )
-                    context = await browser.new_context()
-                    await Malenia.apply_stealth(context)
-                    page = await context.new_page()
-                    await page.goto(url, wait_until="domcontentloaded")
-                    await page.wait_for_load_state(self.load_state)
-                    results = await page.content()
-                    logger.info("Content scraped")
-                    break
+                    try:
+                        context = await browser.new_context()
+                        await Malenia.apply_stealth(context)
+                        page = await context.new_page()
+                        await page.goto(url, wait_until="domcontentloaded")
+                        await page.wait_for_load_state(self.load_state)
+                        results = await page.content()
+                        logger.info("Content scraped")
+                        break
+                    except Exception as e:
+                        print(f"Error fetching {url}: {e}")  # Print the error message 
+                        print('Try with ignore_https_errors=True')
+                        page = await browser.new_page(ignore_https_errors=True)
+                        await page.goto(url, wait_until="domcontentloaded")
+                        await page.wait_for_load_state(self.load_state)
+                        results = await page.content()
+                        logger.info("Content scraped")
+                        break
+                        
             except (aiohttp.ClientError, asyncio.TimeoutError, Exception) as e:
                 attempt += 1
                 logger.error(f"Attempt {attempt} failed: {e}")
