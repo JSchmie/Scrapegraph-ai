@@ -1,5 +1,5 @@
-""" 
-__init__.py file for graphs folder
+"""
+This module defines the graph structures and related functionalities for the ScrapeGraphAI application.
 """
 
 from .abstract_graph import AbstractGraph
@@ -25,3 +25,5 @@ from .screenshot_scraper_graph import ScreenshotScraperGraph
 from .smart_scraper_multi_concat_graph import SmartScraperMultiConcatGraph
 from .code_generator_graph import CodeGeneratorGraph
 from .depth_search_graph import DepthSearchGraph
+from .smart_scraper_multi_lite_graph import SmartScraperMultiLiteGraph
+from .smart_scraper_lite_graph import SmartScraperLiteGraph
